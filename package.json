@@ -1,6 +1,6 @@
 {
-  "name": "api",
-  "version": "0.0.0",
+  "name": "starwars-api",
+  "version": "0.1.0",
   "private": true,
   "main": "app.js",
   "scripts": {
@@ -16,6 +16,6 @@
     "morgan": "~1.9.1"
   },
   "engines": {
-    "node": "16.x"
+    "node": "14.x"
   }
 }
