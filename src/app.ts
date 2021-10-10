@@ -4,7 +4,7 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import cors from 'cors';
-import router from '../routes/main';
+import router from './routes/main';
 import {Request, Response} from "express/ts4.0";
 
 interface ErrorWithStatus extends Error {
