@@ -4,7 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
-const http_errors_1 = __importDefault(require("http-errors"));
 const path_1 = __importDefault(require("path"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -21,17 +20,13 @@ app.use(express_1.default.urlencoded({ extended: false }));
 app.use((0, cookie_parser_1.default)());
 app.use(express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use('/api', main_1.default);
-// catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next((0, http_errors_1.default)(404));
+    res.status(404).json({ "message": "Unknown error" });
 });
-const errorHandler = function (err, req, res) {
-    // set locals, only providing error in development
-    res.locals.message = err.message;
-    res.locals.error = req.app.get('env') === 'development' ? err : {};
+const errorHandler = function (err, req, res, next) {
     // render the error page
-    res.status(err.status || 500);
-    res.render('error');
+    res.status(err.status || 500).json({ "message": "Unknown error" });
+    next();
 };
 // error handler
 app.use(errorHandler);
