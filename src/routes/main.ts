@@ -1,9 +1,8 @@
 import express, {Router} from 'express';
+import MainController from "../controllers/mainController";
 
 const router: Router = express.Router();
 
-router.get("/", function(req, res) {
-  res.send("API is working properly");
-});
+router.get("/:id", MainController.show);
 
 export default router;
