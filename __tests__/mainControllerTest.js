@@ -1,7 +1,7 @@
 import moxios from 'moxios';
 import supertest from 'supertest';
 import app from '../src/app';
-import * as constants from 'constants';
+import * as constants from '../src/constants';
 
 const request = supertest(app);
 
