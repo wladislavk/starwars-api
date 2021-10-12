@@ -13,7 +13,6 @@ export default class MainController {
             const personUrl = constants.STARWARS_API_URL + "/people/" + personId + "/";
             personResponse = await axios.get(personUrl);
         } catch (error) {
-            console.error(error);
             response.status(404).send(error);
             return;
         }
@@ -22,7 +21,6 @@ export default class MainController {
         try {
             planetResponse = await axios.get(personResponse.data.homeworld);
         } catch (error) {
-            console.error(error);
             response.status(404).send(error);
             return;
         }
@@ -33,7 +31,6 @@ export default class MainController {
             try {
                 speciesData.push(await axios.get(specieUrl));
             } catch (error) {
-                console.error(error);
                 response.status(404).send(error);
                 return;
             }
@@ -45,7 +42,6 @@ export default class MainController {
             try {
                 filmsData.push(await axios.get(filmUrl));
             } catch (error) {
-                console.error(error);
                 response.status(404).send(error);
                 return;
             }

@@ -17,7 +17,7 @@ describe('Main Controller show endpoint', () => {
     moxios.uninstall()
   })
 
-  it('checks for 200 when the API is mocked', async (done) => {
+  it('checks for 200 when the API is mocked', async () => {
     moxios.stubRequest(constants.STARWARS_API_URL + "/people/1/", {
       status: 200,
       response: {
@@ -34,10 +34,10 @@ describe('Main Controller show endpoint', () => {
         "birth_year": "19BBY",
         "url": constants.STARWARS_API_URL + "/people/1/",
         "films": [
-          constants.STARWARS_API_URL + "/films/1",
-          constants.STARWARS_API_URL + "/films/2",
-          constants.STARWARS_API_URL + "/films/3",
-          constants.STARWARS_API_URL + "/films/6"
+          constants.STARWARS_API_URL + "/films/1/",
+          constants.STARWARS_API_URL + "/films/2/",
+          constants.STARWARS_API_URL + "/films/3/",
+          constants.STARWARS_API_URL + "/films/6/"
         ],
         "species": [constants.STARWARS_API_URL + "/species/9/"],
         "starships": [],
@@ -170,12 +170,60 @@ describe('Main Controller show endpoint', () => {
 
     expect(response.status).toBe(200);
     const expectedData = {
-
+      name: 'Luke Skywalker',
+      height: '172',
+      mass: '77',
+      hair_color: 'blond',
+      skin_color: 'fair',
+      gender: 'male',
+      homeworld: { name: 'Tatooine', terrain: 'desert', population: '200000' },
+      species: [
+        {
+          name: 'Human',
+          average_lifespan: '120',
+          classification: 'mammal',
+          language: 'Galactic Basic'
+        }
+      ],
+      films: [
+        {
+          title: 'A New Hope',
+          director: 'George Lucas',
+          producer: 'Gary Kurtz, Rick McCallum',
+          release_date: '1977-05-25T00:00:00.000Z'
+        },
+        {
+          title: 'The Empire Strikes Back',
+          director: 'Irvin Kershner',
+          producer: 'Gary Kurtz, Rick McCallum',
+          release_date: '1980-05-17T00:00:00.000Z'
+        },
+        {
+          title: 'Return of the Jedi',
+          director: 'Richard Marquand',
+          producer: 'Howard G. Kazanjian, George Lucas, Rick McCallum',
+          release_date: '1983-05-25T00:00:00.000Z'
+        },
+        {
+          title: 'Revenge of the Sith',
+          director: 'George Lucas',
+          producer: 'Rick McCallum',
+          release_date: '2005-05-19T00:00:00.000Z'
+        }
+      ]
     };
-    expect(response.data).toBe(expectedData);
-    done();
+    expect(response.body).toStrictEqual(expectedData);
   });
-  it('checks for 404 when the object is not found', () => {
+  it('checks for 404 when the object is not found', async () => {
+    moxios.stubRequest(constants.STARWARS_API_URL + "/people/2/", {
+      status: 404,
+      response: {
+        errors: ["No object found"]
+      }
+    });
 
+    const response = await request.get('/api/people/2');
+
+    expect(response.status).toBe(404);
   });
 });

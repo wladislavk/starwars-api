@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const mainController_1 = __importDefault(require("../controllers/mainController"));
 const router = express_1.default.Router();
-router.get("/:id", mainController_1.default.show);
+router.get("/people/:id", mainController_1.default.show);
 router.get('*', function (req, res) {
     res.status(404).json({ "message": "No route matched" });
 });
