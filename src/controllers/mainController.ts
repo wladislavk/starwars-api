@@ -2,22 +2,23 @@ import * as express from 'express';
 import * as models from '../models';
 import * as responses from '../responses';
 import * as constants from '../constants';
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 export default class MainController {
     public static async show(request: express.Request, response: express.Response): Promise<void> {
         const personId = request.params.id;
 
-        /*
+        let personResponse: AxiosResponse<responses.Person>;
         try {
-            const personResponse: responses.Person = await axios.get(constants.STARWARS_API_URL + "/people/" + personId);
+            const personUrl = constants.STARWARS_API_URL + "/people/" + personId + "/";
+            personResponse = await axios.get(personUrl);
         } catch (error) {
             console.error(error);
             response.status(404).send(error);
             return;
         }
-         */
 
+        /*
         const personResponse: responses.Person = {
             "edited": "2014-12-20T21:17:56.891Z",
             "name": "Luke Skywalker",
@@ -41,17 +42,18 @@ export default class MainController {
             "starships": [],
             "vehicles": []
         };
+        */
 
-        /*
+        let planetResponse: AxiosResponse<responses.Planet>;
         try {
-            const planetResponse: responses.Planet = await axios.get(personResponse.homeworld);
+            planetResponse = await axios.get(personResponse.data.homeworld);
         } catch (error) {
             console.error(error);
             response.status(404).send(error);
             return;
         }
-         */
 
+        /*
         const planetResponse: responses.Planet = {
             "edited": "2014-12-20T20:58:18.411Z",
             "climate": "arid",
@@ -68,11 +70,11 @@ export default class MainController {
             "residents": [],
             "films": []
         };
+         */
 
-        const speciesData: Array<responses.Species> = [];
+        const speciesData: Array<AxiosResponse<responses.Species>> = [];
 
-        /*
-        for (const specieUrl of personResponse.species) {
+        for (const specieUrl of personResponse.data.species) {
             try {
                 speciesData.push(await axios.get(specieUrl));
             } catch (error) {
@@ -81,8 +83,8 @@ export default class MainController {
                 return;
             }
         }
-         */
 
+        /*
         speciesData.push({
             "edited": "2014-12-20T21:36:42.136Z",
             "classification": "mammal",
@@ -100,11 +102,11 @@ export default class MainController {
             "url": constants.STARWARS_API_URL + "/species/9",
             "films": [],
         });
+         */
 
-        const filmsData: Array<responses.Film> = [];
+        const filmsData: Array<AxiosResponse<responses.Film>> = [];
 
-        /*
-        for (const filmUrl of personResponse.films) {
+        for (const filmUrl of personResponse.data.films) {
             try {
                 filmsData.push(await axios.get(filmUrl));
             } catch (error) {
@@ -113,7 +115,8 @@ export default class MainController {
                 return;
             }
         }
-         */
+
+        /*
         filmsData.push({
             "starships": [],
             "edited": "2014-12-20T19:49:45.256Z",
@@ -178,38 +181,39 @@ export default class MainController {
             "species": [],
             "url": constants.STARWARS_API_URL + "/films/6"
         });
+         */
 
         const parsedSpeciesData: Array<models.Species> = [];
         for (const species of speciesData) {
             parsedSpeciesData.push({
-                name: species.name,
-                average_lifespan: species.average_lifespan,
-                classification: species.classification,
-                language: species.language
+                name: species.data.name,
+                average_lifespan: species.data.average_lifespan,
+                classification: species.data.classification,
+                language: species.data.language
             });
         }
 
         const parsedFilmsData: Array<models.Film> = [];
         for (const film of filmsData) {
             parsedFilmsData.push({
-                title: film.title,
-                director: film.director,
-                producer: film.producer,
-                release_date: new Date(film.release_date)
+                title: film.data.title,
+                director: film.data.director,
+                producer: film.data.producer,
+                release_date: new Date(film.data.release_date)
             });
         }
 
         const result: models.Person = {
-            name: personResponse.name,
-            height: personResponse.height,
-            mass: personResponse.mass,
-            hair_color: personResponse.hair_color,
-            skin_color: personResponse.skin_color,
-            gender: personResponse.gender,
+            name: personResponse.data.name,
+            height: personResponse.data.height,
+            mass: personResponse.data.mass,
+            hair_color: personResponse.data.hair_color,
+            skin_color: personResponse.data.skin_color,
+            gender: personResponse.data.gender,
             homeworld: {
-                name: planetResponse.name,
-                terrain: planetResponse.terrain,
-                population: planetResponse.population
+                name: planetResponse.data.name,
+                terrain: planetResponse.data.terrain,
+                population: planetResponse.data.population
             },
             species: parsedSpeciesData,
             films: parsedFilmsData

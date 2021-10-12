@@ -27,22 +27,28 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants = __importStar(require("../constants"));
+const axios_1 = __importDefault(require("axios"));
 class MainController {
     static show(request, response) {
         return __awaiter(this, void 0, void 0, function* () {
             const personId = request.params.id;
-            /*
+            let personResponse;
             try {
-                const personResponse: responses.Person = await axios.get(constants.STARWARS_API_URL + "/people/" + personId);
-            } catch (error) {
+                const personUrl = constants.STARWARS_API_URL + "/people/" + personId + "/";
+                personResponse = yield axios_1.default.get(personUrl);
+            }
+            catch (error) {
                 console.error(error);
                 response.status(404).send(error);
                 return;
             }
-             */
-            const personResponse = {
+            /*
+            const personResponse: responses.Person = {
                 "edited": "2014-12-20T21:17:56.891Z",
                 "name": "Luke Skywalker",
                 "created": "2014-12-09T13:50:51.644Z",
@@ -65,16 +71,18 @@ class MainController {
                 "starships": [],
                 "vehicles": []
             };
-            /*
+            */
+            let planetResponse;
             try {
-                const planetResponse: responses.Planet = await axios.get(personResponse.homeworld);
-            } catch (error) {
+                planetResponse = yield axios_1.default.get(personResponse.data.homeworld);
+            }
+            catch (error) {
                 console.error(error);
                 response.status(404).send(error);
                 return;
             }
-             */
-            const planetResponse = {
+            /*
+            const planetResponse: responses.Planet = {
                 "edited": "2014-12-20T20:58:18.411Z",
                 "climate": "arid",
                 "surface_water": "1",
@@ -90,18 +98,19 @@ class MainController {
                 "residents": [],
                 "films": []
             };
+             */
             const speciesData = [];
-            /*
-            for (const specieUrl of personResponse.species) {
+            for (const specieUrl of personResponse.data.species) {
                 try {
-                    speciesData.push(await axios.get(specieUrl));
-                } catch (error) {
+                    speciesData.push(yield axios_1.default.get(specieUrl));
+                }
+                catch (error) {
                     console.error(error);
                     response.status(404).send(error);
                     return;
                 }
             }
-             */
+            /*
             speciesData.push({
                 "edited": "2014-12-20T21:36:42.136Z",
                 "classification": "mammal",
@@ -119,18 +128,19 @@ class MainController {
                 "url": constants.STARWARS_API_URL + "/species/9",
                 "films": [],
             });
+             */
             const filmsData = [];
-            /*
-            for (const filmUrl of personResponse.films) {
+            for (const filmUrl of personResponse.data.films) {
                 try {
-                    filmsData.push(await axios.get(filmUrl));
-                } catch (error) {
+                    filmsData.push(yield axios_1.default.get(filmUrl));
+                }
+                catch (error) {
                     console.error(error);
                     response.status(404).send(error);
                     return;
                 }
             }
-             */
+            /*
             filmsData.push({
                 "starships": [],
                 "edited": "2014-12-20T19:49:45.256Z",
@@ -195,35 +205,36 @@ class MainController {
                 "species": [],
                 "url": constants.STARWARS_API_URL + "/films/6"
             });
+             */
             const parsedSpeciesData = [];
             for (const species of speciesData) {
                 parsedSpeciesData.push({
-                    name: species.name,
-                    average_lifespan: species.average_lifespan,
-                    classification: species.classification,
-                    language: species.language
+                    name: species.data.name,
+                    average_lifespan: species.data.average_lifespan,
+                    classification: species.data.classification,
+                    language: species.data.language
                 });
             }
             const parsedFilmsData = [];
             for (const film of filmsData) {
                 parsedFilmsData.push({
-                    title: film.title,
-                    director: film.director,
-                    producer: film.producer,
-                    release_date: new Date(film.release_date)
+                    title: film.data.title,
+                    director: film.data.director,
+                    producer: film.data.producer,
+                    release_date: new Date(film.data.release_date)
                 });
             }
             const result = {
-                name: personResponse.name,
-                height: personResponse.height,
-                mass: personResponse.mass,
-                hair_color: personResponse.hair_color,
-                skin_color: personResponse.skin_color,
-                gender: personResponse.gender,
+                name: personResponse.data.name,
+                height: personResponse.data.height,
+                mass: personResponse.data.mass,
+                hair_color: personResponse.data.hair_color,
+                skin_color: personResponse.data.skin_color,
+                gender: personResponse.data.gender,
                 homeworld: {
-                    name: planetResponse.name,
-                    terrain: planetResponse.terrain,
-                    population: planetResponse.population
+                    name: planetResponse.data.name,
+                    terrain: planetResponse.data.terrain,
+                    population: planetResponse.data.population
                 },
                 species: parsedSpeciesData,
                 films: parsedFilmsData
