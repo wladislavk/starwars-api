@@ -43,7 +43,6 @@ class MainController {
                 personResponse = yield axios_1.default.get(personUrl);
             }
             catch (error) {
-                console.error(error);
                 response.status(404).send(error);
                 return;
             }
@@ -52,7 +51,6 @@ class MainController {
                 planetResponse = yield axios_1.default.get(personResponse.data.homeworld);
             }
             catch (error) {
-                console.error(error);
                 response.status(404).send(error);
                 return;
             }
@@ -62,7 +60,6 @@ class MainController {
                     speciesData.push(yield axios_1.default.get(specieUrl));
                 }
                 catch (error) {
-                    console.error(error);
                     response.status(404).send(error);
                     return;
                 }
@@ -73,7 +70,6 @@ class MainController {
                     filmsData.push(yield axios_1.default.get(filmUrl));
                 }
                 catch (error) {
-                    console.error(error);
                     response.status(404).send(error);
                     return;
                 }
@@ -103,6 +99,7 @@ class MainController {
                 hair_color: personResponse.data.hair_color,
                 skin_color: personResponse.data.skin_color,
                 gender: personResponse.data.gender,
+                birth_year: personResponse.data.birth_year,
                 homeworld: {
                     name: planetResponse.data.name,
                     terrain: planetResponse.data.terrain,

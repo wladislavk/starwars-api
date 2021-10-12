@@ -176,6 +176,7 @@ describe('Main Controller show endpoint', () => {
       hair_color: 'blond',
       skin_color: 'fair',
       gender: 'male',
+      birth_year: '19BBY',
       homeworld: { name: 'Tatooine', terrain: 'desert', population: '200000' },
       species: [
         {

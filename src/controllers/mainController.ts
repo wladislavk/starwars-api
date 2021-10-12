@@ -74,6 +74,7 @@ export default class MainController {
             hair_color: personResponse.data.hair_color,
             skin_color: personResponse.data.skin_color,
             gender: personResponse.data.gender,
+            birth_year: personResponse.data.birth_year,
             homeworld: {
                 name: planetResponse.data.name,
                 terrain: planetResponse.data.terrain,
